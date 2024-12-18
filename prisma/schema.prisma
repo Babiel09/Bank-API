@@ -12,3 +12,26 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id Int @id @default(autoincrement())
+  name String
+  email String
+  password String
+  transacoes Transacoes[]
+}
+
+model Transacoes{
+  id Int @id @default(autoincrement())
+  name String
+  valor Float
+  createdById Int
+  createdBy User @relation(fields: [createdById], references: [id])
+  tipo Tipo
+}
+
+enum Tipo {
+  Deposito
+  Saque
+  Transferencia
+}
