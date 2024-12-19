@@ -22,5 +22,8 @@ CREATE TABLE "Transacoes" (
     CONSTRAINT "Transacoes_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
 -- AddForeignKey
 ALTER TABLE "Transacoes" ADD CONSTRAINT "Transacoes_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
