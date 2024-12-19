@@ -35,7 +35,6 @@ export class UserService{
             return verificaEmail;
         }catch(err){
             console.error(err);
-            throw new ExceptionsHandler();
         };
     };
 
@@ -55,7 +54,6 @@ export class UserService{
             
         } catch(err){
             console.error(err);
-            throw new ExceptionsHandler();
         };
     };
     
@@ -70,26 +68,23 @@ export class UserService{
             return tentaSelect;
         }catch(err){
             console.error(err);
-            throw new ExceptionsHandler();
         };
     };
     
-    public async SelectOne({id}:UserThings):Promise<User>{
+    public async SelectOne(id:number):Promise<User>{
         try{
             const tentaSelectOne = await this.prisma.findFirst({
                 where:{
-                    id:id
+                    id:Number(id)
                 }
             });
             if(!tentaSelectOne){
                 console.error("Error to select all the data into the db!");
-                throw new ExceptionsHandler();
                 
             };
             return tentaSelectOne;
         } catch(err){
             console.error(err);
-            throw new ExceptionsHandler();
         };
     };  
 
