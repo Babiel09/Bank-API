@@ -6,7 +6,7 @@ import { JwtService } from "@nestjs/jwt";
 export class UserAuth{
     constructor(private readonly jwtService:JwtService){};
 
-    private createNewToken(argument:any):string{
+    public createNewToken(argument:any):string{
         try{
             const novoArgs = this.jwtService.sign({argument});
             if(!novoArgs){
@@ -20,7 +20,7 @@ export class UserAuth{
         };
     };
 
-    private async checkTheToken(token:string):Promise<object>{
+    public async checkTheToken(token:string):Promise<object>{
         try{
             const verificaToken = await this.jwtService.verify(token);
 
@@ -36,7 +36,7 @@ export class UserAuth{
         };
     };
 
-    private async makeTheTokenAnArgument(token:string){
+    public async makeTheTokenAnArgument(token:string){
         try{
             this.checkTheToken(String(token));
             await this.jwtService.decode(token)
