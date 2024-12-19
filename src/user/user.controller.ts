@@ -3,10 +3,11 @@ import { UserService } from "./user.service";
 import { Response } from "express";
 import { CreationUser } from "./DTO/user.dto";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
+import { UserAuth } from "./auth/user.auth";
 
 @Controller("/user")
 export class UserController{
-    constructor(private readonly userService:UserService){};
+    constructor(private readonly userService:UserService, private readonly userAuth:UserAuth){};
 
     @Get("/v1")
     private async getAllUsers(@Res() res:Response):Promise<Response>{
@@ -40,6 +41,29 @@ export class UserController{
                 res.status(400).json({server:"You need to pass the user PASSWORD!"});
                 throw new ExceptionsHandler();
             };
+
+            const fazSenhaToken = await this.userAuth.createNewToken(data.password);
+            const verifica = await this.userAuth.checkTheToken(fazSenhaToken);
+
+            if(!verifica){
+                console.error("We can't verify the JWT token, please try again later!");
+                res.status(500).json({server:"We can't verify the JWT token, please try again later!"});
+                throw new ExceptionsHandler();
+            };
+
+            data.password = fazSenhaToken;
+
+            const fazNovouser = await this.userService.Insert(data);
+
+            if(!fazNovouser){
+                console.error("We can't post the user!");
+                res.status(500).json({server:"We can't post the user, please try again later!"});
+                throw new ExceptionsHandler();
+            };
+
+            console.log(`New user: ${data.name}!`);
+            return res.status(201).send(fazNovouser);
+
             
         }catch(err){
             console.error(err);
