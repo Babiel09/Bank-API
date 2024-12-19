@@ -53,6 +53,13 @@ export class UserController{
 
             data.password = fazSenhaToken;
 
+            const verificaOEmail = await this.userService.verificaEmail(data.email);
+
+            if(verificaOEmail){
+                console.error("This email already existis!");
+                return res.status(400).json({server:`The email: ${data.email}, already existis!`});
+            };
+
             const fazNovouser = await this.userService.Insert(data);
 
             if(!fazNovouser){

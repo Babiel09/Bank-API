@@ -24,8 +24,24 @@ export class UserService{
         this.prisma = pr.user;
     };
 
+    public async verificaEmail(email:string):Promise<User>{
+        try{
+            const verificaEmail = await this.prisma.findUnique({
+                where:{
+                    email:email
+                },
+            });
+
+            return verificaEmail;
+        }catch(err){
+            console.error(err);
+            throw new ExceptionsHandler();
+        };
+    };
+
     public async Insert(data:CreationUser):Promise<User>{
         try{
+            this.verificaEmail(data.email);
             const tentaInsert = await this.prisma.create({
                 data:data
             });
