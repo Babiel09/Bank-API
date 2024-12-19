@@ -3,7 +3,7 @@ import { ExternalExceptionsHandler } from "@nestjs/core/exceptions/external-exce
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
-export class Userauth{
+export class UserAuth{
     constructor(private readonly jwtService:JwtService){};
 
     private createNewToken(argument:any):string{

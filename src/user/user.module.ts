@@ -2,10 +2,22 @@ import { Module } from "@nestjs/common";
 import { CreationUser } from "./DTO/user.dto";
 import { UserService } from "./user.service";
 import { PrismaService } from "prisma/prisma.service";
+import { UserAuth } from "./auth/user.auth";
+import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule } from "@nestjs/config";
 
 @Module({
-    imports:[UserModule],
+    imports:[
+        UserModule,
+        ConfigModule.forRoot(),
+       JwtModule.register({
+        secret:process.env.JWT_SECRET,
+        signOptions:{
+            expiresIn:2313678592184
+        },
+       }),
+    ],
     controllers:[],
-    providers:[CreationUser, UserService,PrismaService],
+    providers:[CreationUser, UserService,PrismaService, UserAuth],
 })
 export class UserModule{};
