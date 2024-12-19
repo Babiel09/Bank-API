@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res, Delete, Put, Body } from "@nestjs/common";
+import { Controller, Get, Post, Res, Delete, Put, Body, Param } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { Response } from "express";
 import { CreationUser } from "./DTO/user.dto";
@@ -17,6 +17,7 @@ export class UserController{
                 console.error("We find an error to show all users, pelase verify this line of code!");
                 return res.status(500).json({server:"We find an error to show all users, pelase verify this line of code!"});
             };
+            console.log(todosUsers);
             return res.status(200).send(todosUsers);
         } catch(err){
             console.error(err);
@@ -24,22 +25,36 @@ export class UserController{
         }
     };
 
+    @Get("/v1/:id")
+    private async getOneuser(@Res() res:Response, @Param("id") id:number):Promise<Response>{
+        try{
+            const usuarioEspecifo = await this.userService.SelectOne(id);
+            if(!usuarioEspecifo){
+                console.error("Error to show the specified user!");
+                return res.status(500).json({server:"Please try later!"});
+            }
+            console.log(usuarioEspecifo);
+            return res.status(200).send(usuarioEspecifo);
+
+        } catch(err){
+            console.error(err);
+            return res.status(500).send(err);
+        };
+    };
+
     @Post("/v1")
     private async postNewUser(@Body() data:CreationUser, @Res() res:Response):Promise<Response>{
         try{
             if(!data.name){
-                res.status(400).json({server:"You need to pass the user NAME!"});
-                throw new ExceptionsHandler();
+                return res.status(400).json({server:"You need to pass the user NAME!"});
             };
 
             if(!data.email){
-                res.status(400).json({server:"You need to pass the user EMAIL!"});
-                throw new ExceptionsHandler();
+                return res.status(400).json({server:"You need to pass the user EMAIL!"});
             };
 
             if(!data.password){
-                res.status(400).json({server:"You need to pass the user PASSWORD!"});
-                throw new ExceptionsHandler();
+                return res.status(400).json({server:"You need to pass the user PASSWORD!"});
             };
 
             const fazSenhaToken = await this.userAuth.createNewToken(data.password);
@@ -47,8 +62,7 @@ export class UserController{
 
             if(!verifica){
                 console.error("We can't verify the JWT token, please try again later!");
-                res.status(500).json({server:"We can't verify the JWT token, please try again later!"});
-                throw new ExceptionsHandler();
+               return res.status(500).json({server:"We can't verify the JWT token, please try again later!"});
             };
 
             data.password = fazSenhaToken;
@@ -64,17 +78,17 @@ export class UserController{
 
             if(!fazNovouser){
                 console.error("We can't post the user!");
-                res.status(500).json({server:"We can't post the user, please try again later!"});
-                throw new ExceptionsHandler();
+                return res.status(500).json({server:"We can't post the user, please try again later!"});
             };
 
             console.log(`New user: ${data.name}!`);
+            console.log(fazNovouser);
             return res.status(201).send(fazNovouser);
 
             
         }catch(err){
             console.error(err);
             return res.status(500).send(err);
-        }
+        };
     };
 };
