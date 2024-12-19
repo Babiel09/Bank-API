@@ -3,6 +3,7 @@ import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
 import { Prisma, Transacoes, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
+import { CreationUser } from "./DTO/user.dto";
 
 interface UserThings{
     id?:number;
@@ -23,14 +24,10 @@ export class UserService{
         this.prisma = pr.user;
     };
 
-    public async Insert({name,email,password}:UserThings):Promise<User>{
+    public async Insert(data:CreationUser):Promise<User>{
         try{
             const tentaInsert = await this.prisma.create({
-                data:{
-                    name:name,
-                    email:email,
-                    password:password
-                }
+                data:data
             });
 
             if(!tentaInsert){
