@@ -31,7 +31,7 @@ export class UserController{
             const usuarioEspecifo = await this.userService.SelectOne(id);
             if(!usuarioEspecifo){
                 console.error("Error to show the specified user!");
-                return res.status(500).json({server:"Please try later!"});
+                return res.status(404).json({server:"User not found, please try later!"});
             }
             console.log(usuarioEspecifo);
             return res.status(200).send(usuarioEspecifo);
@@ -86,6 +86,22 @@ export class UserController{
             return res.status(201).send(fazNovouser);
 
             
+        }catch(err){
+            console.error(err);
+            return res.status(500).send(err);
+        };
+    };
+
+    @Delete("/v1/:id")
+    private async deleteOneUser(@Param("id") id:number, @Res() res:Response):Promise<Response>{
+        try{
+            const deletado = await this.userService.Delete(id);
+            if(!deletado){
+                console.error("Error to delete the data, please try again later!");
+                return res.status(201).json({server:"Error to delete the data, please try again later!"});
+            };
+            console.log("Usuário deletado");
+            return res.status(204).json({server: "User is sucefully deleted!"});
         }catch(err){
             console.error(err);
             return res.status(500).send(err);
