@@ -5,7 +5,7 @@ import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
 
-interface UserThings{
+export interface UserThings{
     id?:number;
     name?:string;
     email?:string;
@@ -117,7 +117,41 @@ export class UserService{
             return tentaSelectOne;
         } catch(err){
             console.error(err);
+            return null;
         };
     };  
+
+    public async Update({id,data}:UserThings):Promise<User>{
+        try{
+            const procuraOIdFornecido = await this.prisma.findFirst({
+                where:{
+                    id:Number(id)
+                },
+            });
+
+            if(!procuraOIdFornecido){
+                console.error("We can't find the specified user id!");
+                return null;
+            };
+
+            const tentaAtualizarOsItensNoDB = await this.prisma.update({
+                where:{
+                    id:procuraOIdFornecido.id
+                },
+                data:data,
+            });
+
+            if(!tentaAtualizarOsItensNoDB){
+                console.error("We can't find the update the user in the DB!");
+                return null;
+            };
+
+            return tentaAtualizarOsItensNoDB;
+
+        }catch(err){
+            console.error(err);
+            return null;
+        };
+    };
 
 };
