@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res, Delete, Put, Body, Param } from "@nestjs/common";
+import { Controller, Get, Post, Res, Delete, Put, Body, Param, Query } from "@nestjs/common";
 import { UserService, UserThings } from "./user.service";
 import { Response } from "express";
 import { CreationUser } from "./DTO/user.dto";
@@ -24,10 +24,32 @@ export class UserController{
             return res.status(500).send(err);
         }
     };
+    @Get("/v1/search")
+    private async getUserByname(@Res() res:Response, @Query("name") name:string):Promise<Response>{
+        try{
+
+            console.log("Rota do query!");
+
+            const user = await this.userService.SearchuserByName(name);
+
+            if(!user || user.length === 0){
+                console.error(`We can't find the user with this name: ${name}`);
+                return res.status(404).json({server:`We can't find the user with this name: ${name}`});
+            };
+
+            console.log(user);
+            return res.status(200).send(user);
+
+        }catch(err){
+            console.error(err);
+            return res.status(500).send(err);
+        };
+    };
 
     @Get("/v1/:id")
     private async getOneuser(@Res() res:Response, @Param("id") id:number):Promise<Response>{
         try{
+            console.log("Rota do get by id!");
             const usuarioEspecifo = await this.userService.SelectOne(id);
             if(!usuarioEspecifo){
                 console.error("Error to show the specified user!");
@@ -41,6 +63,7 @@ export class UserController{
             return res.status(500).send(err);
         };
     };
+
 
     @Post("/v1")
     private async postNewUser(@Body() data:CreationUser, @Res() res:Response):Promise<Response>{
@@ -92,7 +115,7 @@ export class UserController{
         };
     };
 
-    @Delete("/v1/:id")
+    @Delete("/v2/:id")
     private async deleteOneUser(@Param("id") id:number, @Res() res:Response):Promise<Response>{
         try{
             const deletado = await this.userService.Delete(id);
@@ -107,8 +130,6 @@ export class UserController{
             return res.status(500).send(err);
         };
     };
-
-
 
     @Put("/v1/:id")
     private async postASpecifiedUser(@Param("id") id:number, @Body()data:UserThings, @Res() res:Response){
