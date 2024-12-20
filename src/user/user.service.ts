@@ -56,6 +56,38 @@ export class UserService{
             console.error(err);
         };
     };
+
+    public async Delete(id:number):Promise<User>{
+        try{
+            const procuraOIdFornecido = await this.prisma.findFirst({
+                where:{
+                    id:Number(id)
+                },
+            });
+
+            if(!procuraOIdFornecido){
+                console.error("We can't find the specified user id!");
+                return null;
+            };
+
+            const tentaDeletarOUsuarioNoDB = await this.prisma.delete({
+                where:{
+                    id:procuraOIdFornecido.id
+                },
+            });
+
+            if(!tentaDeletarOUsuarioNoDB){
+                console.error("We can't try to delete the specified user!");
+                return null;
+            };
+
+            return tentaDeletarOUsuarioNoDB;
+
+        }catch(err){
+            console.error(err);
+            return null;
+        };
+    };
     
     public async SelectAll():Promise<User[]>{
         try{
