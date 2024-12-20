@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Res, Delete, Put, Body, Param } from "@nestjs/common";
-import { UserService } from "./user.service";
+import { UserService, UserThings } from "./user.service";
 import { Response } from "express";
 import { CreationUser } from "./DTO/user.dto";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
@@ -107,4 +107,27 @@ export class UserController{
             return res.status(500).send(err);
         };
     };
+
+
+
+    @Put("/v1/:id")
+    private async postASpecifiedUser(@Param("id") id:number, @Body()data:UserThings, @Res() res:Response){
+        try{
+
+            const verificaOEmail = await this.userService.verificaEmail(data.email);
+
+            if(verificaOEmail){
+                console.error("This email already existis!");
+                return res.status(400).json({server:`The email: ${data.email}, already existis!`});
+            };
+
+            const updatedUser = await this.userService.Update(id,data);
+
+            return res.status(202).send(updatedUser);
+        }catch(err){
+            console.error(err);
+            return res.status(500).send(err);
+        };
+    };
+
 };
