@@ -114,11 +114,9 @@ export class UserController{
     private async postASpecifiedUser(@Param("id") id:number, @Body()data:UserThings, @Res() res:Response){
         try{
 
-            const verificaOEmail = await this.userService.verificaEmail(data.email);
-
-            if(verificaOEmail){
-                console.error("This email already existis!");
-                return res.status(400).json({server:`The email: ${data.email}, already existis!`});
+            if(data.email){
+                console.error("The user can't change their email!");
+                return res.status(401).json({server:"You can't change your email, try to update another element!"});
             };
 
             const updatedUser = await this.userService.Update(id,data);
