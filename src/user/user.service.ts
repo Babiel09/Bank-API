@@ -154,4 +154,25 @@ export class UserService{
         };
     };
 
+    public async SearchuserByName(name:string):Promise<User>{
+        try{
+            const tentaProcurarOUser = await this.prisma.findFirst({
+                where:{
+                    name:name,
+                },
+            });
+
+            if(!tentaProcurarOUser){
+                console.error("We can't find the user in the DB!");
+                return null;
+            };
+
+            return tentaProcurarOUser;
+
+        }catch(err){
+            console.error(err);
+            return null;
+        };
+    };
+
 };
