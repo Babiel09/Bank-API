@@ -121,7 +121,7 @@ export class UserService{
         };
     };  
 
-    public async Update({id,data}:UserThings):Promise<User>{
+    public async Update(id:number,{data}:UserThings):Promise<User>{
         try{
             const procuraOIdFornecido = await this.prisma.findFirst({
                 where:{
