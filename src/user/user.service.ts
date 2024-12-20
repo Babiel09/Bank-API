@@ -103,23 +103,23 @@ export class UserService{
         };
     };
     
-    public async SelectOne(id:number):Promise<User>{
-        try{
+    public async SelectOne(id: number): Promise<User | null> {
+        try {
             const tentaSelectOne = await this.prisma.findFirst({
-                where:{
-                    id:Number(id)
-                }
+                where: {
+                    id: Number(id),
+                },
             });
-            if(!tentaSelectOne){
-                console.error("Error to select all the data into the db!");
-                
-            };
+            if (!tentaSelectOne) {
+                console.error("Error: No data found for the given ID!");
+                return null;
+            }
             return tentaSelectOne;
-        } catch(err){
-            console.error(err);
+        } catch (err) {
+            console.error("Error while selecting data from the database:", err);
             return null;
-        };
-    };  
+        }
+    }
 
     public async Update(id:number,{data}:UserThings):Promise<User>{
         try{
@@ -154,17 +154,20 @@ export class UserService{
         };
     };
 
-    public async SearchuserByName(name:string):Promise<User>{
+    public async SearchuserByName(name:string):Promise<User[]>{
         try{
-            const tentaProcurarOUser = await this.prisma.findFirst({
+            const tentaProcurarOUser = await this.prisma.findMany({
                 where:{
-                    name:name,
+                    name:{
+                        contains:name,
+                        mode:"insensitive",
+                    },
                 },
             });
 
-            if(!tentaProcurarOUser){
+            if(!tentaProcurarOUser || tentaProcurarOUser.length === 0){
                 console.error("We can't find the user in the DB!");
-                return null;
+                return [];
             };
 
             return tentaProcurarOUser;
