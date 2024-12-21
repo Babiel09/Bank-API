@@ -10,6 +10,7 @@ export interface UserThings{
     name?:string;
     email?:string;
     password?:string;
+    saldo?:number;
     transacoes:Transacoes[];
     data?:{
         [key:string]:any
