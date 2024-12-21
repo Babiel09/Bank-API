@@ -1,10 +1,11 @@
 import { InjectQueue } from "@nestjs/bull";
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { Prisma, Tipo, Transacoes } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Queue } from "bull";
 import { PrismaService } from "prisma/prisma.service";
 import { TRANSACOES_QUEUE } from "src/constants/constansts";
+import { CreateTransacao } from "./DTO/money.dto";
 
 
 
@@ -23,7 +24,7 @@ export class MoneyService{
         this.prisma = pr.transacoes;
     };
 
-    public async Insert({name,valor,createdById,tipo}:MoneyThings):Promise<Transacoes | null>{
+    public async Insert({name,valor,createdById,tipo}:CreateTransacao):Promise<Transacoes | null>{
         try{    
             const tentaCriar = await this.prisma.create({
                 data:{
@@ -39,6 +40,8 @@ export class MoneyService{
                 return null;
             };
 
+            Logger.log("Processando job")
+
             await this.transacoes.add(TRANSACOES_QUEUE,{
                 transactionId:tentaCriar.id,
                 transactionName:tentaCriar.name,
@@ -46,6 +49,8 @@ export class MoneyService{
                 transactionCreatedBy:tentaCriar.createdById,
                 transactionType:tentaCriar.tipo,
             });
+
+            Logger.log("Foi, job indo ser processado")
 
             return tentaCriar;
 
