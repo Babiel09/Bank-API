@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
 import { Prisma, Transacoes, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
@@ -19,6 +19,7 @@ export interface UserThings{
 
 @Injectable()
 export class UserService{
+    private readonly logger = new Logger(UserService.name);
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
     constructor(private readonly pr:PrismaService){
         this.prisma = pr.user;
@@ -34,7 +35,7 @@ export class UserService{
 
             return verificaEmail;
         }catch(err){
-            console.error(err);
+            this.logger.error(err);
         };
     };
 
@@ -46,14 +47,14 @@ export class UserService{
             });
 
             if(!tentaInsert){
-                console.error("Error to insert the data into the db!");
+                this.logger.error("Error to insert the data into the db!");
               throw new ExceptionsHandler();
             };
             
             return tentaInsert;
             
         } catch(err){
-            console.error(err);
+            this.logger.error(err);
         };
     };
 
@@ -66,7 +67,7 @@ export class UserService{
             });
 
             if(!procuraOIdFornecido){
-                console.error("We can't find the specified user id!");
+                this.logger.error("We can't find the specified user id!");
                 return null;
             };
 
@@ -77,14 +78,14 @@ export class UserService{
             });
 
             if(!tentaDeletarOUsuarioNoDB){
-                console.error("We can't try to delete the specified user!");
+                this.logger.error("We can't try to delete the specified user!");
                 return null;
             };
 
             return tentaDeletarOUsuarioNoDB;
 
         }catch(err){
-            console.error(err);
+            this.logger.error(err);
             return null;
         };
     };
@@ -93,13 +94,13 @@ export class UserService{
         try{
             const tentaSelect = await this.prisma.findMany();
             if(!tentaSelect){
-                console.error("Error to select all the data into the db!");
+                this.logger.error("Error to select all the data into the db!");
                 throw new ExceptionsHandler();
 
             };
             return tentaSelect;
         }catch(err){
-            console.error(err);
+            this.logger.error(err);
         };
     };
     
@@ -111,12 +112,12 @@ export class UserService{
                 },
             });
             if (!tentaSelectOne) {
-                console.error("Error: No data found for the given ID!");
+                this.logger.error("Error: No data found for the given ID!");
                 return null;
             }
             return tentaSelectOne;
         } catch (err) {
-            console.error("Error while selecting data from the database:", err);
+            this.logger.error("Error while selecting data from the database:", err);
             return null;
         }
     }
@@ -130,7 +131,7 @@ export class UserService{
             });
 
             if(!procuraOIdFornecido){
-                console.error("We can't find the specified user id!");
+                this.logger.error("We can't find the specified user id!");
                 return null;
             };
 
@@ -142,14 +143,14 @@ export class UserService{
             });
 
             if(!tentaAtualizarOsItensNoDB){
-                console.error("We can't find the update the user in the DB!");
+                this.logger.error("We can't find the update the user in the DB!");
                 return null;
             };
 
             return tentaAtualizarOsItensNoDB;
 
         }catch(err){
-            console.error(err);
+            this.logger.error(err);
             return null;
         };
     };
@@ -166,14 +167,14 @@ export class UserService{
             });
 
             if(!tentaProcurarOUser || tentaProcurarOUser.length === 0){
-                console.error("We can't find the user in the DB!");
+                this.logger.error("We can't find the user in the DB!");
                 return [];
             };
 
             return tentaProcurarOUser;
 
         }catch(err){
-            console.error(err);
+            this.logger.error(err);
             return null;
         };
     };

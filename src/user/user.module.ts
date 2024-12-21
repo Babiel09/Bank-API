@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Logger, Module } from "@nestjs/common";
 import { CreationUser } from "./DTO/user.dto";
 import { UserService } from "./user.service";
 import { PrismaService } from "prisma/prisma.service";
@@ -19,6 +19,6 @@ import { UserController } from "./user.controller";
        }),
     ],
     controllers:[UserController],
-    providers:[CreationUser, UserService,PrismaService, UserAuth],
+    providers:[CreationUser, UserService,PrismaService, UserAuth, Logger],
 })
 export class UserModule{};

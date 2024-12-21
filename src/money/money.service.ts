@@ -37,7 +37,7 @@ export class MoneyService{
             });
 
             if(!tentaCriar){
-                console.error("We failed to create the transaction");
+                this.logger.error("We failed to create the transaction");
                 return null;
             };
 
@@ -56,7 +56,7 @@ export class MoneyService{
             return tentaCriar;
 
         } catch(err){
-            console.error(err);
+            this.logger.error(err);
             return null;
         };
     };

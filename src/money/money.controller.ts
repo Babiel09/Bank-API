@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Res, Delete, Put, Body, Param, Query } from "@nestjs/common";
+import { Controller, Get, Post, Res, Delete, Put, Body, Param, Query, Logger } from "@nestjs/common";
 import { MoneyService } from "./money.service";
 import { Response } from "express";
 import { CreateTransacao } from "./DTO/money.dto";
 
 @Controller("/task")
 export class MoneyController{
+    private readonly logger = new Logger(MoneyController.name);
     constructor(private readonly moneyService:MoneyService){};
 
     @Post("/v1")
@@ -13,7 +14,7 @@ export class MoneyController{
             const criaNovaTransacao = await this.moneyService.Insert(data);
             return res.status(201).send(criaNovaTransacao)
         } catch(err){
-            console.error(err);
+            this.logger.error(err);
             return res.status(500).json({server:err});
         };
     };
