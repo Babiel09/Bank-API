@@ -8,18 +8,15 @@ import { MoneyModule } from './money/money.module';
   imports: [
     UserModule,
     MoneyModule,
-    BullModule.forRoot({
-      redis:process.env.REDIS_URL,
-      defaultJobOptions:{
-        removeOnComplete:100,
-        attempts:3,
-        removeOnFail:300,
-        backoff:{
-          type:"exponential",
-          delay:1000,
-        }
-      },
-    }),
+   BullModule.forRoot({
+    redis:{
+      host:"localhost",
+      port:6379,
+    },
+   }),
+   BullModule.registerQueue({
+    name:"transacoes-queue",
+   }),
   ],
   controllers: [],
   providers: [PrismaService,],
