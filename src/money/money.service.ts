@@ -51,7 +51,7 @@ export class MoneyService{
                 transactionType:tentaCriar.tipo,
             });
 
-            this.logger.log(`Job foi carregado = ${JSON.stringify(job)}`);
+            this.logger.log(`\nJob foi carregado = \n${JSON.stringify(job)}\n`);
 
             return tentaCriar;
 
