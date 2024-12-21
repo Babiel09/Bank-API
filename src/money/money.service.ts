@@ -1,9 +1,9 @@
 import { InjectQueue } from "@nestjs/bull";
-import { Injectable, Logger } from "@nestjs/common";
+import { Inject, Injectable, Logger } from "@nestjs/common";
 import { Prisma, Tipo, Transacoes } from "@prisma/client";
 import { DefaultArgs } from "@Prisma/client/runtime/library";
 import { Queue } from "bull";
-import { PrismaService } from "Prisma/prisma.service";
+import { PrismaService } from "prisma/prisma.service"
 import { TRANSACOES_QUEUE } from "src/constants/constansts";
 import { CreateTransacao } from "./DTO/money.dto";
 import { UserService } from "src/user/user.service";
@@ -19,12 +19,14 @@ export interface MoneyThings{
 };
 
 @Injectable()
-export class MoneyService extends UserService{
+export class MoneyService{
     private readonly prisma2: Prisma.TransacoesDelegate<DefaultArgs>;
     private readonly logger2 = new Logger(MoneyService.name);
-    constructor(private readonly pr2:PrismaService, @InjectQueue(TRANSACOES_QUEUE) private readonly transacoes:Queue){
-        super(pr2);
-        this.prisma2 = pr2.transacoes;
+    constructor(
+       @Inject()private readonly pr2:PrismaService,
+        @InjectQueue(TRANSACOES_QUEUE) private readonly transacoes:Queue,
+     ){
+        this.prisma2 = pr2.transacoes; 
     };
 
     public async Insert2({name,valor,forId,tipo}:CreateTransacao):Promise<Transacoes | null>{
