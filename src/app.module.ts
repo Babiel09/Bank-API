@@ -2,11 +2,12 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from 'prisma/prisma.service';
 import { UserModule } from './user/user.module';
 import { BullModule } from '@nestjs/bull';
-import { delay } from 'rxjs';
+import { MoneyModule } from './money/money.module';
 
 @Module({
   imports: [
     UserModule,
+    MoneyModule,
     BullModule.forRoot({
       redis:process.env.REDIS_URL,
       defaultJobOptions:{
