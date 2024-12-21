@@ -7,6 +7,7 @@ CREATE TABLE "User" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "saldo" DOUBLE PRECISION NOT NULL DEFAULT 0,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -16,7 +17,7 @@ CREATE TABLE "Transacoes" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "valor" DOUBLE PRECISION NOT NULL,
-    "createdById" INTEGER NOT NULL,
+    "forId" INTEGER NOT NULL,
     "tipo" "Tipo" NOT NULL,
 
     CONSTRAINT "Transacoes_pkey" PRIMARY KEY ("id")
@@ -26,4 +27,4 @@ CREATE TABLE "Transacoes" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- AddForeignKey
-ALTER TABLE "Transacoes" ADD CONSTRAINT "Transacoes_createdById_fkey" FOREIGN KEY ("createdById") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Transacoes" ADD CONSTRAINT "Transacoes_forId_fkey" FOREIGN KEY ("forId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

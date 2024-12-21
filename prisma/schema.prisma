@@ -18,6 +18,7 @@ model User{
   name String
   email String @unique
   password String
+  saldo Float @default(0) 
   transacoes Transacoes[]
 }
 
@@ -25,8 +26,8 @@ model Transacoes{
   id Int @id @default(autoincrement())
   name String
   valor Float
-  createdById Int
-  createdBy User @relation(fields: [createdById], references: [id])
+  forId Int
+  for User @relation(fields: [forId], references: [id])
   tipo Tipo
 }
 
