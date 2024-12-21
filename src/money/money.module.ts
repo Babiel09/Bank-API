@@ -5,16 +5,18 @@ import { MoneyService } from "./money.service";
 import { MoneyProcessor } from "src/money/processor/money.processor";
 import { BullModule } from "@nestjs/bull";
 import { TRANSACOES_QUEUE } from "src/constants/constansts";
+import {UserModule} from "src/user/user.module";
 import { UserService } from "src/user/user.service";
+import { PrismaModule } from "prisma/prisma.module";
 
 @Module({
     imports:[
-        UserService,
-        BullModule.registerQueue({
-            name:TRANSACOES_QUEUE,
-        }),
+        UserModule,
+       BullModule.registerQueue({
+           name:TRANSACOES_QUEUE, 
+       }), 
     ],
     controllers:[MoneyController],
-    providers:[PrismaService,MoneyService,MoneyProcessor,Logger],
+    providers:[MoneyService,MoneyProcessor,Logger],
 })
 export class MoneyModule{};
