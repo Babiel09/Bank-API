@@ -11,7 +11,7 @@ export class MoneyController{
     @Post("/v1")
     public async postATransacao(@Res() res:Response, @Body()data:CreateTransacao):Promise<Response>{
         try{
-            const criaNovaTransacao = await this.moneyService.Insert(data);
+            const criaNovaTransacao = await this.moneyService.Insert2(data);
             return res.status(201).send(criaNovaTransacao)
         } catch(err){
             this.logger.error(err);
