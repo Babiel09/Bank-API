@@ -3,7 +3,7 @@ import { MoneyService } from "./money.service";
 import { Response } from "express";
 import { CreateTransacao } from "./DTO/money.dto";
 
-@Controller("/task")
+@Controller("/transfer")
 export class MoneyController{
     private readonly logger = new Logger(MoneyController.name);
     constructor(private readonly moneyService:MoneyService){};
