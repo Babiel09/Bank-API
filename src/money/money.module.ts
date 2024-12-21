@@ -5,9 +5,11 @@ import { MoneyService } from "./money.service";
 import { MoneyProcessor } from "src/money/processor/money.processor";
 import { BullModule } from "@nestjs/bull";
 import { TRANSACOES_QUEUE } from "src/constants/constansts";
+import { UserService } from "src/user/user.service";
 
 @Module({
     imports:[
+        UserService,
         BullModule.registerQueue({
             name:TRANSACOES_QUEUE,
         }),
