@@ -9,12 +9,13 @@ import { MoneyService } from "src/money/money.service";
 
 @Processor(TRANSACOES_QUEUE)
 export class MoneyProcessor{
-    constructor(private readonly moneyService:MoneyService, private readonly logger: Logger){};
+    private readonly logger = new Logger(MoneyProcessor.name);
+    constructor(private readonly moneyService:MoneyService){};
     @Process()
     private async postTransacao(job:Job<CreateTransacao>){
-        Logger.log("Creating job!");
-        Logger.log(`Job: ${JSON.stringify(job.data)}`);
+        this.logger.log("Creating job!");
+        this.logger.log(`Job: ${JSON.stringify(job.data)}`);
         this.moneyService.Insert(job.data);
-        Logger.log(`Job completead: ${JSON.stringify(job.data)}`);
+        this.logger.log(`Job completead: ${JSON.stringify(job.data)}`);
     };
 };
