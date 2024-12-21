@@ -3,6 +3,7 @@ import { PrismaService } from 'prisma/prisma.service';
 import { UserModule } from './user/user.module';
 import { BullModule } from '@nestjs/bull';
 import { MoneyModule } from './money/money.module';
+import { TRANSACOES_QUEUE } from './constants/constansts';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { MoneyModule } from './money/money.module';
     },
    }),
    BullModule.registerQueue({
-    name:"transacoes-queue",
+    name:TRANSACOES_QUEUE,
    }),
   ],
   controllers: [],
