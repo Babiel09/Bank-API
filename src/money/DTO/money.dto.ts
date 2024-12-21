@@ -11,6 +11,8 @@ export class CreateTransacao{
         valor:number;
         @IsNumber()
         createdById:number;
+        @IsNumber()
+        forId:number;
         @MaxLength(32849790)
         tipo: Tipo;
 };
