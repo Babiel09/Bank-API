@@ -6,10 +6,11 @@ import { UserAuth } from "./auth/user.auth";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { UserController } from "./user.controller";
+import { PrismaModule } from "prisma/prisma.module";
 
 @Module({
     imports:[
-        UserModule,
+        PrismaModule,
         ConfigModule.forRoot(),
        JwtModule.register({
         secret:process.env.JWT_SECRET,
