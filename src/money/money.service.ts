@@ -1,5 +1,5 @@
 import { InjectQueue } from "@nestjs/bull";
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Prisma, Tipo, Transacoes } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { Queue } from "bull";
