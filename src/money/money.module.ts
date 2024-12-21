@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Logger, Module } from "@nestjs/common";
 import { PrismaService } from "prisma/prisma.service";
 import { MoneyController } from "./money.controller";
 import { MoneyService } from "./money.service";
@@ -13,6 +13,6 @@ import { TRANSACOES_QUEUE } from "src/constants/constansts";
         }),
     ],
     controllers:[MoneyController],
-    providers:[PrismaService,MoneyService, MoneyProcessor],
+    providers:[PrismaService,MoneyService,MoneyProcessor,Logger],
 })
 export class MoneyModule{};
