@@ -1,0 +1,1 @@
+export const TRANSACOES_QUEUE = "transacoes-queue";
