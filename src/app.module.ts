@@ -4,11 +4,13 @@ import { UserModule } from './user/user.module';
 import { BullModule } from '@nestjs/bull';
 import { MoneyModule } from './money/money.module';
 import { TRANSACOES_QUEUE } from './constants/constansts';
+import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
   imports: [
+    PrismaModule, 
     UserModule,
-    MoneyModule,
+     MoneyModule, 
    BullModule.forRoot({
     redis:{
       host:"localhost",
@@ -23,6 +25,6 @@ import { TRANSACOES_QUEUE } from './constants/constansts';
    }),
   ],
   controllers: [],
-  providers: [PrismaService,],
+  providers: [], 
 })
 export class AppModule {}
