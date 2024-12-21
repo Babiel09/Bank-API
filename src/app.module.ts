@@ -14,6 +14,9 @@ import { TRANSACOES_QUEUE } from './constants/constansts';
       host:"localhost",
       port:6379,
     },
+    settings:{
+      
+    }
    }),
    BullModule.registerQueue({
     name:TRANSACOES_QUEUE,
