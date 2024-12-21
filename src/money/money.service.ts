@@ -20,6 +20,7 @@ export interface MoneyThings{
 @Injectable()
 export class MoneyService{
     private readonly prisma: Prisma.TransacoesDelegate<DefaultArgs>;
+    private readonly logger = new Logger(MoneyService.name);
     constructor(private readonly pr:PrismaService, @InjectQueue(TRANSACOES_QUEUE) private readonly transacoes:Queue){
         this.prisma = pr.transacoes;
     };
@@ -40,9 +41,9 @@ export class MoneyService{
                 return null;
             };
 
-            Logger.log("Processando job")
+            this.logger.log("Processando job");
 
-            await this.transacoes.add(TRANSACOES_QUEUE,{
+           const job = await this.transacoes.add(TRANSACOES_QUEUE,{
                 transactionId:tentaCriar.id,
                 transactionName:tentaCriar.name,
                 transactionValue:tentaCriar.valor,
@@ -50,7 +51,7 @@ export class MoneyService{
                 transactionType:tentaCriar.tipo,
             });
 
-            Logger.log("Foi, job indo ser processado")
+            this.logger.log(`Job foi carregado = ${JSON.stringify(job)}`);
 
             return tentaCriar;
 
