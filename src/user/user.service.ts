@@ -15,6 +15,7 @@ export interface UserThings{
     data?:{
         [key:string]:any
     };
+    valor?:number;
 };
 
 
