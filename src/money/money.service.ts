@@ -1,7 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Prisma, Tipo, Transacoes } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { Queue } from "bull";
 import { PrismaService } from "prisma/prisma.service";
+import { TRANSACOES_QUEUE } from "src/constants/constansts";
 
 
 
@@ -16,7 +18,7 @@ export interface MoneyThings{
 @Injectable()
 export class MoneyService{
     private readonly prisma: Prisma.TransacoesDelegate<DefaultArgs>;
-    constructor(private readonly pr:PrismaService){
+    constructor(private readonly pr:PrismaService, @Inject(TRANSACOES_QUEUE) private readonly transacoes:Queue){
         this.prisma = pr.transacoes;
     };
 
@@ -36,8 +38,16 @@ export class MoneyService{
                 return null;
             };
 
+            await this.transacoes.add(TRANSACOES_QUEUE,{
+                transactionId:tentaCriar.id,
+                transactionName:tentaCriar.name,
+                transactionValue:tentaCriar.valor,
+                transactionCreatedBy:tentaCriar.createdById,
+                transactionType:tentaCriar.tipo,
+            });
 
             return tentaCriar;
+
         } catch(err){
             console.error(err);
             return null;
