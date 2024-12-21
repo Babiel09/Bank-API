@@ -15,7 +15,7 @@ export class MoneyProcessor{
     private async postTransacao(job:Job<CreateTransacao>){
         this.logger.log("Creating job!");
         this.logger.log(`Job: ${JSON.stringify(job.data)}`);
-        this.moneyService.Insert(job.data);
+        this.moneyService.Insert2(job.data);
         this.logger.log(`Job completead: ${JSON.stringify(job.data)}`);
     };
 };
