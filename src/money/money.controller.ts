@@ -38,6 +38,35 @@ export class MoneyController{
         };
     };
 
+    @Post("/v1/withdraw")
+
+    private async withDrawMoney(@Res()res:Response, @Body() data:{forId:number, valor:number}):Promise<Response>{
+        try{
+            if(!data.forId){
+                this.logger.error("You need to input the user id!");
+                return res.status(401).json({server:"You need to input the user id!"});
+            };
+
+            if(!data.valor){
+                this.logger.error("You need to input the value!");
+                return res.status(402).json({server:"You need to input the value!"});
+            };
+
+            const novoWithdraw = await this.moneyService.WithDrawMoney(data);
+
+            if(!novoWithdraw){
+                this.logger.error("Crazy error, please try again later!");
+                return res.status(500).json({server:"Crazy error, please try again later!"});
+            };
+
+            return res.status(202).send(novoWithdraw);
+
+        }catch(err){
+            this.logger.error(err);
+            return res.status(500).json({server:err});
+        };
+    };
+
     @Post("/v1")
     private async postATransacao(@Res() res:Response, @Body()data:CreateTransacao):Promise<Response>{
         try{
