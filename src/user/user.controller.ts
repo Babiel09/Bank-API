@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Res, Delete, Put, Body, Param, Query, Logger } from "@nestjs/common";
+import { Controller, Get, Post, Res, Delete, Put, Body, Param, Query, Logger, UsePipes } from "@nestjs/common";
 import { UserService, UserThings } from "./user.service";
 import { Response } from "express";
 import { CreationUser } from "./DTO/user.dto";
 import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
 import { UserAuth } from "./auth/user.auth";
+import { UserPipe } from "./pipes/user.pipes";
 
 @Controller("/user")
 export class UserController{
@@ -67,6 +68,7 @@ export class UserController{
 
 
     @Post("/v1")
+    @UsePipes(UserPipe)
     private async postNewUser(@Body() data:CreationUser, @Res() res:Response):Promise<Response>{
         try{
             if(!data.name){
