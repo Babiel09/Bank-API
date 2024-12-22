@@ -22,4 +22,9 @@ export class MoneyProcessor{
     private async TransferInprocess(job:Job){
       this.moneyService.Transfer(job.data);  
     };
+
+    @Process("withdraw")
+    private async WithDrawInprocess(job:Job){
+      this.moneyService.WithDrawMoney(job.data);
+    };
 }; 
