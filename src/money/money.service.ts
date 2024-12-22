@@ -67,16 +67,16 @@ export class MoneyService{
         };
     };
 
-    public async Transfer({forId}:CreateTransacao, valor:UserThings):Promise<User | null>{
+    public async Transfer(data:{forId:number,valor:number}):Promise<User | null>{
         try{
 
-            const verificaOId = await this.userService.SelectOne(forId);
+            const verificaOId = await this.userService.SelectOne(data.forId);
 
             if(!verificaOId){
-                this.logger2.error(`The user id(${forId}) of the transfer does not exist!`);
+                this.logger2.error(`The user id(${data.forId}) of the transfer does not exist!`);
             };
 
-            const tentaEfetuarATransferencia = await this.userService.Update(verificaOId.id, valor);
+            const tentaEfetuarATransferencia = await this.userService.UpdateTheValue(data);
             if(!tentaEfetuarATransferencia){
                 this.logger2.error("We can't try to do the Transfer!");
                 return null;
@@ -86,7 +86,7 @@ export class MoneyService{
 
             const job = await this.transacoes.add(TRANSACOES_QUEUE, {
                 transactionId:verificaOId.id,
-                transactionValue: valor 
+                transactionValue: data.valor 
             });
 
             if(!job){
