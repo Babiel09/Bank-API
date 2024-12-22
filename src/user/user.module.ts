@@ -21,5 +21,6 @@ import { PrismaModule } from "prisma/prisma.module";
     ],
     controllers:[UserController],
     providers:[CreationUser, UserService,PrismaService, UserAuth, Logger],
+    exports:[UserService],
 })
 export class UserModule{};
