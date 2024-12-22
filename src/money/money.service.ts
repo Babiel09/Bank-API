@@ -77,6 +77,7 @@ export class MoneyService{
             };
 
             const tentaEfetuarATransferencia = await this.userService.UpdateTheValuePlus(data);
+
             if(!tentaEfetuarATransferencia){
                 this.logger2.error("We can't try to do the Transfer!");
                 return null;
@@ -97,6 +98,43 @@ export class MoneyService{
             this.logger2.log(`Job sucefully done! = \n${JSON.stringify(job)}\n`);
             
             return tentaEfetuarATransferencia;
+
+        }catch(err){
+            this.logger2.error(err);
+            return null;
+        };
+    };
+
+    public async WithDrawMoney(data:{forId:number, valor:number}):Promise<User| null>{
+        try{
+            const verificaOId = await this.userService.SelectOne(data.forId);
+
+            if(!verificaOId){
+                this.logger2.error(`The user id(${data.forId}) of the transfer does not exist!`);
+            };
+
+            const tentaSacarDinehiro = await this.userService.UpdateTheValueDown(data);
+
+            if(!tentaSacarDinehiro){
+                this.logger2.error("We can't try to do the Transfer!");
+                return null;
+            };
+
+            this.logger2.log("Starting the job process!");
+
+            const job = this.transacoes.add(TRANSACOES_QUEUE, {
+                transactionId:verificaOId.id,
+                transactionValue: data.valor 
+            })
+
+            if(!job){
+                this.logger2.error("We failed to process the job!");
+                return null;
+            };
+
+            this.logger2.log(`Job sucefully process = \n Job: \n ${JSON.stringify(job)}`);
+
+            return tentaSacarDinehiro;
 
         }catch(err){
             this.logger2.error(err);
