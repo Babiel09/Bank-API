@@ -11,7 +11,7 @@ import { PrismaModule } from "prisma/prisma.module";
 
 @Module({
     imports:[
-        UserModule,
+       UserModule,
        BullModule.registerQueue({
            name:TRANSACOES_QUEUE, 
        }), 
