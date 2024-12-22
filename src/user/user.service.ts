@@ -158,7 +158,7 @@ export class UserService{
         };
     };
 
-    public async UpdateTheValue(data:{forId:number,valor:number}):Promise<User>{
+    public async UpdateTheValuePlus(data:{forId:number,valor:number}):Promise<User>{
         try{
             const procuraOIdFornecido = await this.prisma.findFirst({
                 where:{

@@ -76,7 +76,7 @@ export class MoneyService{
                 this.logger2.error(`The user id(${data.forId}) of the transfer does not exist!`);
             };
 
-            const tentaEfetuarATransferencia = await this.userService.UpdateTheValue(data);
+            const tentaEfetuarATransferencia = await this.userService.UpdateTheValuePlus(data);
             if(!tentaEfetuarATransferencia){
                 this.logger2.error("We can't try to do the Transfer!");
                 return null;
