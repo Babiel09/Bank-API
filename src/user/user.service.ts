@@ -194,6 +194,42 @@ export class UserService{
         };
     };
 
+    public async UpdateTheValueDown(data:{forId:number,valor:number}):Promise<User>{
+        try{
+            const procuraOIdFornecido = await this.prisma.findFirst({
+                where:{
+                    id:Number(data.forId)
+                },
+            });
+
+            let saldoAtual = procuraOIdFornecido.saldo;
+
+            if(!procuraOIdFornecido){
+                this.logger.error("We can't find the specified user id!");
+                return null;
+            };
+
+            const tentaAtualizarOsItensNoDB = await this.prisma.update({
+                where:{
+                    id:procuraOIdFornecido.id
+                },
+                data:{
+                    saldo: saldoAtual -= data.valor
+                },
+            });
+
+            if(!tentaAtualizarOsItensNoDB){
+                this.logger.error("We can't find the update the user in the DB!");
+                return null;
+            };
+
+            return tentaAtualizarOsItensNoDB;
+        }catch(err){
+            this.logger.error(err);
+            return null;
+        };
+    };
+
     public async SearchuserByName(name:string):Promise<User[]>{
         try{
             const tentaProcurarOUser = await this.prisma.findMany({
