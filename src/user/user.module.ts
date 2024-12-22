@@ -7,6 +7,7 @@ import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule } from "@nestjs/config";
 import { UserController } from "./user.controller";
 import { PrismaModule } from "prisma/prisma.module";
+import { UserPipe } from "./pipes/user.pipes";
 
 @Module({
     imports:[
@@ -20,7 +21,7 @@ import { PrismaModule } from "prisma/prisma.module";
        }),
     ],
     controllers:[UserController],
-    providers:[CreationUser, UserService,PrismaService, UserAuth, Logger],
+    providers:[CreationUser, UserService,PrismaService, UserAuth, Logger, UserPipe],
     exports:[UserService],
 })
 export class UserModule{};
