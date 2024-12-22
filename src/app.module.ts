@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'prisma/prisma.service';
 import { UserModule } from './user/user.module';
 import { BullModule } from '@nestjs/bull';
 import { MoneyModule } from './money/money.module';
@@ -15,9 +14,6 @@ import { PrismaModule } from 'prisma/prisma.module';
     redis:{
       host:"localhost",
       port:6379,
-    },
-    settings:{
-      
     }
    }),
    BullModule.registerQueue({
