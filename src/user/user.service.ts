@@ -4,6 +4,7 @@ import { Prisma, Transacoes, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
+import { CreateTransacao } from "src/money/DTO/money.dto";
 
 export interface UserThings{
     id?:number;
@@ -151,6 +152,42 @@ export class UserService{
 
             return tentaAtualizarOsItensNoDB;
 
+        }catch(err){
+            this.logger.error(err);
+            return null;
+        };
+    };
+
+    public async UpdateTheValue(data:{forId:number,valor:number}):Promise<User>{
+        try{
+            const procuraOIdFornecido = await this.prisma.findFirst({
+                where:{
+                    id:Number(data.forId)
+                },
+            });
+
+            let saldoAtual = procuraOIdFornecido.saldo;
+
+            if(!procuraOIdFornecido){
+                this.logger.error("We can't find the specified user id!");
+                return null;
+            };
+
+            const tentaAtualizarOsItensNoDB = await this.prisma.update({
+                where:{
+                    id:procuraOIdFornecido.id
+                },
+                data:{
+                    saldo: saldoAtual += data.valor
+                },
+            });
+
+            if(!tentaAtualizarOsItensNoDB){
+                this.logger.error("We can't find the update the user in the DB!");
+                return null;
+            };
+
+            return tentaAtualizarOsItensNoDB;
         }catch(err){
             this.logger.error(err);
             return null;
