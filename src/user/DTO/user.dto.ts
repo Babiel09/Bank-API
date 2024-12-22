@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { IsEmail, IsNumber, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 @Injectable()
 export class  CreationUser{
@@ -13,8 +13,9 @@ export class  CreationUser{
     @IsString({message:"The password needs to be a string!"})
     @MinLength(8,{message:"The password needs to have 8 caractheres!"})
     password:string;
-
+    
+    @IsOptional()
     @IsNumber()
-    saldo:number;
+    saldo?:number;
 
 };
