@@ -4,8 +4,9 @@ import { Prisma, Transacoes, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
-import * as bcrypt from "bcrypt";
-import { CreateTransacao } from "src/money/DTO/money.dto";
+import { Queue } from "bull";
+import { USER_QUEUE } from "src/constants/constansts";
+import { InjectQueue } from "@nestjs/bull";
 
 export interface UserThings{
     id?:number;
@@ -26,7 +27,9 @@ export interface UserThings{
 export class UserService{
     private readonly logger = new Logger(UserService.name);
     private readonly prisma: Prisma.UserDelegate<DefaultArgs>;
-    constructor(private readonly pr:PrismaService){
+    constructor(
+        private readonly pr:PrismaService, 
+        @InjectQueue(USER_QUEUE) private readonly login:Queue){
         this.prisma = pr.user;
     };
 
@@ -266,7 +269,16 @@ export class UserService{
 
            if(!procuraUnico){
             return null;
-           }
+           };
+
+           this.logger.log("Rederizing the job!");
+           const login = await this.login.add(USER_QUEUE,{
+            loginId:procuraUnico.id,
+            loginName:procuraUnico.name,
+            loginEmail:procuraUnico.email,
+           });
+
+           this.logger.log(`New Job: \n ${JSON.stringify(login)}`);
 
            return procuraUnico;
         }catch(err){
