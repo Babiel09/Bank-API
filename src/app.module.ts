@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { BullModule } from '@nestjs/bull';
 import { MoneyModule } from './money/money.module';
-import { TRANSACOES_QUEUE } from './constants/constansts';
+import { TRANSACOES_QUEUE, USER_QUEUE } from './constants/constansts';
 import { PrismaModule } from 'prisma/prisma.module';
 
 @Module({
@@ -18,6 +18,9 @@ import { PrismaModule } from 'prisma/prisma.module';
    }),
    BullModule.registerQueue({
     name:TRANSACOES_QUEUE,
+   }),
+   BullModule.registerQueue({
+    name:USER_QUEUE,
    }),
   ],
   controllers: [],
