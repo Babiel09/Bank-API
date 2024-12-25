@@ -26,8 +26,8 @@ export class UserController{
             return res.status(200).send(todosUsers);
         } catch(err){
             this.logger.error(err);
-            return res.status(500).send(err);
-        }
+            return res.status(500).json({server:`${err}`});
+        };
     };
     @Get("/v1/search")
     private async getUserByname(@Res() res:Response, @Query("name") name:string):Promise<Response>{
@@ -47,7 +47,7 @@ export class UserController{
 
         }catch(err){
             this.logger.error(err);
-            return res.status(500).send(err);
+            return res.status(500).json({server:`${err}`});
         };
     };
 
@@ -63,9 +63,9 @@ export class UserController{
             this.logger.log(usuarioEspecifo);
             return res.status(200).send(usuarioEspecifo);
 
-        } catch(err){
+        }catch(err){
             this.logger.error(err);
-            return res.status(500).send(err);
+            return res.status(500).json({server:`${err}`});
         };
     };
 
@@ -111,7 +111,7 @@ export class UserController{
             
         }catch(err){
             this.logger.error(err);
-            return res.status(500).send(err);
+            return res.status(500).json({server:`${err}`});
         };
     };
 
@@ -131,6 +131,7 @@ export class UserController{
            this.logger.debug(colocaOUsuarioComoLogado.email)
            this.logger.debug(colocaOUsuarioComoLogado.name)
            this.logger.debug(colocaOUsuarioComoLogado.login)
+
            const doyouremember = await this.prisma.update({
                where:{
                    id:Number(colocaOUsuarioComoLogado.id),
@@ -139,9 +140,15 @@ export class UserController{
                     login:mudarEstadoLogin,   
                 }
             });
+
+            if(!doyouremember){
+                this.logger.error("Amazin error! HAHAHAHAHAH");
+                return res.status(500).json({server:"We don't know what happend, please try again later!"});
+            };
+
             this.logger.debug(colocaOUsuarioComoLogado.login);
 
-           return res.status(202).json({server:"Login is auhorazed!"});
+           return res.status(202).json(doyouremember);
 
         }catch(err){
             this.logger.error(err);
@@ -161,7 +168,7 @@ export class UserController{
             return res.status(204).json({server: "User is sucefully deleted!"});
         }catch(err){
             this.logger.error(err);
-            return res.status(500).send(err);
+            return res.status(500).json({server:`${err}`});
         };
     };
 
@@ -179,7 +186,7 @@ export class UserController{
             return res.status(202).send(updatedUser);
         }catch(err){
             this.logger.error(err);
-            return res.status(500).send(err);
+            return res.status(500).json({server:`${err}`});
         };
     };
 
