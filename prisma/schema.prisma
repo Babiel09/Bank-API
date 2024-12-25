@@ -18,7 +18,8 @@ model User{
   name String
   email String @unique
   password String
-  saldo Float @default(0) 
+  saldo Float @default(0)
+  login Boolean @default(false)
   transacoes Transacoes[]
 }
 
