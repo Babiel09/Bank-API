@@ -4,6 +4,7 @@ import { Prisma, Transacoes, User } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaService } from "prisma/prisma.service";
 import { CreationUser } from "./DTO/user.dto";
+import * as bcrypt from "bcrypt";
 import { CreateTransacao } from "src/money/DTO/money.dto";
 
 export interface UserThings{
@@ -12,6 +13,7 @@ export interface UserThings{
     email?:string;
     password?:string;
     saldo?:number;
+    login?:boolean;
     transacoes:Transacoes[];
     data?:{
         [key:string]:any
@@ -248,6 +250,25 @@ export class UserService{
 
             return tentaProcurarOUser;
 
+        }catch(err){
+            this.logger.error(err);
+            return null;
+        };
+    };
+
+    public async Login(data:{email:string, password:string}):Promise<User | null>{
+        try{
+           const procuraUnico = await this.prisma.findUnique({
+            where:{
+                email:data.email
+            },
+           });
+
+           if(!procuraUnico){
+            return null;
+           }
+
+           return procuraUnico;
         }catch(err){
             this.logger.error(err);
             return null;
