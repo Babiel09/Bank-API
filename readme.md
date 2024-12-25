@@ -15,12 +15,17 @@ The API also includes a robust authentication system using JWT (JSON Web Tokens)
 - **Database Integration**: Leverages a database for storing user and transaction data.
 
 ## Technologies Used
-
-- **Node.js**: Backend runtime.
-- **Express.js**: Web application framework.
-- **JWT**: For secure user authentication.
-- **TypeScript**: Ensures type safety and better code quality.
-- **MongoDB** *(optional)*: Example database for storing user and transaction data.
+### Node.js
+<img src="https://skillicons.dev/icons?i=nodejs" /><br/>
+### Nest.js
+<img src="https://skillicons.dev/icons?i=nestjs" /><br/>
+### JWT
+### Typescript
+<img src="https://skillicons.dev/icons?i=typescript" /><br/>
+### Prisma
+<img src="https://skillicons.dev/icons?i=prisma" /><br/>
+### Postgres
+<img src="https://skillicons.dev/icons?i=postgres" /><br/>
 
 ## Installation
 
@@ -43,9 +48,9 @@ The API also includes a robust authentication system using JWT (JSON Web Tokens)
    - Create a `.env` file in the root directory.
    - Add the following variables:
      ```env
-     PORT=3000
+     PORT=4857
      JWT_SECRET=your_jwt_secret
-     DB_URI=your_database_uri # If using MongoDB
+     DB_URL=your_database_uri 
      ```
 
 5. Start the server:
@@ -53,38 +58,24 @@ The API also includes a robust authentication system using JWT (JSON Web Tokens)
    npm start
    ```
 
-6. The API will be available at `http://localhost:3000`.
+6. The API will be available at `http://localhost:4857`.
 
 ## Endpoints
 
-### Authentication
-- `POST /auth/login`: Log in to the system and receive a JWT.
-- `POST /auth/register`: Register a new user.
+### Banking Endpoints
+- `POST /transfer/v1/deposit`: Deposit money into an account.
+- `POST /transfer/v1/withdraw`: Withdraw money from an account.
+- `POST /transfer/v1/transfer`: Transfer money to another account.
 
-### Banking Operations
-- `POST /transactions/deposit`: Deposit money into an account.
-- `POST /transactions/withdraw`: Withdraw money from an account.
-- `POST /transactions/transfer`: Transfer money to another account.
-
-## Folder Structure
-
-The repository is organized as follows:
-
-- **src**: Contains the main application code.
-  - **controllers**: Handles the business logic for each feature.
-  - **routes**: Defines API endpoints.
-  - **models**: Database schemas and models.
-  - **middleware**: Custom middleware like authentication.
-  - **utils**: Utility functions and helpers.
+- ### User Endpoints
+- `GET /user/v1`: Get all users.
+- `GET /user/v1/search`: Search from one user in the DB.
+- `GET /user/v1/:id `: Get one specified user for the id.
+- `GET /user/v3/login `: Try to made the user login.
+- `POST /user/v1 `: Post a new user.
+- `PUT /user/v1/:id `: Updated a user with the specified id.
+- `DELETE /user/v2/:id `: Delte one user with a specified id.
 
 ## Contributing
 
 Feel free to submit issues or pull requests for improvements or bug fixes.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-Start building your banking applications with this API today! 🚀
