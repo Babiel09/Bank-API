@@ -4,12 +4,10 @@ import { BullModule } from '@nestjs/bull';
 import { MoneyModule } from './money/money.module';
 import { TRANSACOES_QUEUE } from './constants/constansts';
 import { PrismaModule } from 'prisma/prisma.module';
-import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     PrismaModule, 
-    AuthModule,
     UserModule,
      MoneyModule, 
    BullModule.forRoot({
