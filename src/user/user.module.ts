@@ -7,6 +7,8 @@ import { ConfigModule } from "@nestjs/config";
 import { UserController } from "./user.controller";
 import { PrismaModule } from "prisma/prisma.module";
 import { UserPipe } from "./pipes/user.pipes"
+import { BullModule } from "@nestjs/bull";
+import { USER_QUEUE } from "src/constants/constansts";
 
 @Module({
     imports:[
@@ -17,6 +19,9 @@ import { UserPipe } from "./pipes/user.pipes"
         signOptions:{
             expiresIn:2313678592184
         },
+       }),
+       BullModule.registerQueue({
+        name:USER_QUEUE,
        }),
     ],
     controllers:[UserController],
