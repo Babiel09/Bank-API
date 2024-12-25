@@ -142,4 +142,20 @@ export class MoneyService{
         };
     };
 
+    public async DepositMoney(data:{forId:number, valor:number}):Promise<User | null>{
+        try{
+            const tryToDeposit = await this.userService.UpdateTheValuePlus(data);
+            if(!tryToDeposit){
+                this.logger2.error(`We can't find the user with this id(${data.forId})`);
+                return null;
+            };
+
+            return tryToDeposit;
+
+        }catch(err){
+            this.logger2.error(err);
+            return null;
+        };
+    };
+
 };
