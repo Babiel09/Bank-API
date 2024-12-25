@@ -2,14 +2,17 @@ import { Controller, Get, Post, Res, Delete, Put, Body, Param, Query, Logger, Us
 import { UserService, UserThings } from "./user.service";
 import { Response } from "express";
 import { CreationUser } from "./DTO/user.dto";
-import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
-import { UserAuth } from "./auth/user.auth";
+import * as bcrypt from "bcrypt";
 import { UserPipe } from "./pipes/user.pipes";
+import { PrismaService } from "prisma/prisma.service";
 
 @Controller("/user")
 export class UserController{
     private readonly logger = new Logger(UserController.name);
-    constructor(private readonly userService:UserService, private readonly userAuth:UserAuth){};
+    private readonly prisma;
+    constructor(private readonly userService:UserService, private readonly pr:PrismaService){
+        this.prisma = pr.user;
+    };
 
     @Get("/v1")
     private async getAllUsers(@Res() res:Response):Promise<Response>{
@@ -83,13 +86,7 @@ export class UserController{
                 return res.status(400).json({server:"You need to pass the user PASSWORD!"});
             };
 
-            const fazSenhaToken = await this.userAuth.createNewToken(data.password);
-            const verifica = await this.userAuth.checkTheToken(fazSenhaToken);
-
-            if(!verifica){
-                this.logger.error("We can't verify the JWT token, please try again later!");
-               return res.status(500).json({server:"We can't verify the JWT token, please try again later!"});
-            };
+            const fazSenhaToken = await bcrypt.hash(data.password, 12);
 
             data.password = fazSenhaToken;
 
@@ -118,6 +115,40 @@ export class UserController{
         };
     };
 
+    @Get("/v3/login")
+    private async login(@Res() res:Response, @Body() data:{email:string, password:string}):Promise<Response>{
+        try{
+           const colocaOUsuarioComoLogado = await this.userService.Login(data);
+
+           const comparacao = await bcrypt.compare(data.password, colocaOUsuarioComoLogado.password);
+
+           if(!comparacao){
+               return res.status(401).json({server:"Login is fudido!"});
+           };
+
+           let mudarEstadoLogin = colocaOUsuarioComoLogado.login = true;
+
+           this.logger.debug(colocaOUsuarioComoLogado.email)
+           this.logger.debug(colocaOUsuarioComoLogado.name)
+           this.logger.debug(colocaOUsuarioComoLogado.login)
+           const doyouremember = await this.prisma.update({
+               where:{
+                   id:Number(colocaOUsuarioComoLogado.id),
+                },
+                data:{
+                    login:mudarEstadoLogin,   
+                }
+            });
+            this.logger.debug(colocaOUsuarioComoLogado.login);
+
+           return res.status(202).json({server:"Login is auhorazed!"});
+
+        }catch(err){
+            this.logger.error(err);
+            return res.status(500).json({server:`${err}`});
+        };
+    };
+    
     @Delete("/v2/:id")
     private async deleteOneUser(@Param("id") id:number, @Res() res:Response):Promise<Response>{
         try{
