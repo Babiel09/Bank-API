@@ -114,7 +114,7 @@ export class UserService{
     
     public async SelectOne(id: number): Promise<User | null> {
         try {
-            const tentaSelectOne = await this.prisma.findFirst({
+            const tentaSelectOne = await this.prisma.findUnique({
                 where: {
                     id: Number(id),
                 },
@@ -132,7 +132,7 @@ export class UserService{
 
     public async Update(id:number,{data}:UserThings):Promise<User>{
         try{
-            const procuraOIdFornecido = await this.prisma.findFirst({
+            const procuraOIdFornecido = await this.prisma.findUnique({
                 where:{
                     id:Number(id)
                 },
@@ -165,7 +165,7 @@ export class UserService{
 
     public async UpdateTheValuePlus(data:{forId:number,valor:number}):Promise<User>{
         try{
-            const procuraOIdFornecido = await this.prisma.findFirst({
+            const procuraOIdFornecido = await this.prisma.findUnique({
                 where:{
                     id:Number(data.forId)
                 },
