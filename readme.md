@@ -20,12 +20,17 @@ The API also includes a robust authentication system using JWT (JSON Web Tokens)
 ### Nest.js
 <img src="https://skillicons.dev/icons?i=nestjs" /><br/>
 ### JWT
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc-NViQHfwad5ZxH5vhGu89h3YT52SQpDnjg&s" width=55/><br/>
 ### Typescript
 <img src="https://skillicons.dev/icons?i=typescript" /><br/>
 ### Prisma
 <img src="https://skillicons.dev/icons?i=prisma" /><br/>
 ### Postgres
 <img src="https://skillicons.dev/icons?i=postgres" /><br/>
+### Redis
+<img src="https://skillicons.dev/icons?i=redis" /><br/>
+### BullMQ
+<img src="https://repository-images.githubusercontent.com/162494199/a1d3ba61-e0f0-4916-a376-53002605da83"  width=66/><br/>
 
 ## Installation
 
