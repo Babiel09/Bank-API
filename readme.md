@@ -19,8 +19,8 @@ The API also includes a robust authentication system using JWT (JSON Web Tokens)
 <img src="https://skillicons.dev/icons?i=nodejs" /><br/>
 ### Nest.js
 <img src="https://skillicons.dev/icons?i=nestjs" /><br/>
-### JWT
-<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc-NViQHfwad5ZxH5vhGu89h3YT52SQpDnjg&s" width=55/><br/>
+### Bcrypt
+<img src="https://repository-images.githubusercontent.com/139898859/9617c480-81c2-11ea-94fc-322231ead1f0" width=65/><br/>
 ### Typescript
 <img src="https://skillicons.dev/icons?i=typescript" /><br/>
 ### Prisma
